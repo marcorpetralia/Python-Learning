@@ -1,0 +1,126 @@
+class Vehicle:
+    """
+    Vehicle is a type that describes a machine that helps us travel
+    """
+
+    #default_tire = "tire"
+    
+    def __init__(self, distance_traveled=0, unit='miles', **kwargs):
+        """
+        Customizes the initialization of the object
+        """
+        self.distance_traveled = distance_traveled
+        self.unit = unit
+
+    #@classmethod
+    # def bicycle(cls, tires=None):
+    #     if not tires:
+    #         tires = [cls.default_tire, cls.default_tire]
+    #     return cls(None, tires)
+    
+    #@staticmethod
+        
+    
+    def description(self):
+        return f"A {self.__class__.__name__} that has traveled {self.distance_traveled} {self.unit}"
+
+########################################################################################################################
+
+from vehicle import Vehicle
+
+class Bicycle(Vehicle):
+    default_tire = 'tire'
+
+    def __init__(self, tires=[], distance_traveled=0, unit='mile'):
+        super().__init__(distance_traveled, unit)
+        if not tires:
+            tires = [self.default_tire, self.default_tire]
+        self.tires = tires
+    
+    def description(self):
+        initial = super().description()
+        return f"{initial} on {len(self.tires)} tires."
+
+if __name__ == "__main__":
+    bike = Bicycle()
+    print(bike.description())
+   
+########################################################################################################################
+
+from vehicle import Vehicle
+
+class Car(Vehicle):
+    default_tire = 'tire'
+
+    def __init__(self, engine, tires=[], distance_traveled=0, unit='mile', **kwargs):
+        super().__init__(distance_traveled=distance_traveled, unit=unit, **kwargs)
+        if not tires:
+            tires = [self.default_tire, self.default_tire, self.default_tire, self.default_tire]
+        self.tires = tires
+        self.engine = engine
+    
+    def drive(self, distance):
+        self.distance_traveled += distance
+ 
+
+########################################################################################################################
+
+from vehicle import Vehicle
+
+class Boat(Vehicle):
+    
+    def __init__(self, boat_type='sail', distance_traveled=0, unit='mile', **kwargs):
+        super().__init__(distance_traveled=distance_traveled, unit=unit, **kwargs)
+        self.boat_type = boat_type
+    
+    def voyage(self, distance):
+        self.distance_traveled += distance
+    
+    def description(self):
+        initial = super().description()
+        return f"{initial} using a {self.boat_type}"
+        
+########################################################################################################################
+ 
+from boat import Boat
+from car import Car
+
+class AmphibiousVehicle(Car, Boat):
+    def __init__(self, engine, tires=[], distance_traveled=0, unit='mile'):
+        super().__init__(engine=engine, tires=tires, distance_traveled=distance_traveled, unit=unit)
+        self.boat_type = 'motor'
+    
+    def travel(self, land_distance=0, water_distance=0):
+        super().voyage(water_distance)
+        super().drive(land_distance)
+    
+    def __str__(self):
+        return f"<{self.__class__.__name__} {self.__dict__}>"
+
+if __name__ == "__main__":
+    water_car = AmphibiousVehicle('4 cylinder')
+    print(water_car)
+    
+########################################################################################################################
+
+class Mapping():
+    def __init__(self, iterable):
+        self.items_list = []
+        self.__update(iterable)
+
+    def update(self, iterable):
+        for item in iterable:
+            self.item_list.append(item)
+
+    __update = update
+    ##hidden / personal methods/things
+
+class MappingSubclass(Mapping):
+    def update(self, keys, values):
+        for item in zip(keys,values):
+            self.item_list.append(item)
+    
+    def print_something(self):
+        print("print something")
+
+    __update = print_something
